@@ -1,41 +1,53 @@
 import { DataTypes, Model, type InferAttributes, type InferCreationAttributes, type CreationOptional } from "sequelize";
 import sequelize from "../dbconfig/database.ts";
 
-export class Client extends Model<InferAttributes<Client>, InferCreationAttributes<Client>> {
+export class Order extends Model<InferAttributes<Order>, InferCreationAttributes<Order>> {
     declare id: CreationOptional<number>;
-    declare name: string;
-    declare email: string;
-    declare phone: string;
+    declare clientId: number;
+    declare userId: number;
+    declare orderDate: Date;
+    declare totalAmount: number;
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
 }
 
-Client.init({
+Order.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    name: {
-        type: DataTypes.STRING(100),
+    clientId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-            len: [3, 100],
+        references: {
+            model: 'clients',
+            key: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
     },
-    email: {
-        type: DataTypes.STRING(100),
+    userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
+        references: {
+            model: 'users',
+            key: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
     },
-    phone: {
-        type: DataTypes.STRING(10),
+    orderDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+    },
+    totalAmount: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
-            is: /^[0-9]{10}$/,
+            isDecimal: true,
+            min: 0,
         },
     },
     createdAt: {
@@ -51,8 +63,8 @@ Client.init({
 },
     {
         sequelize,
-        modelName: "Client",
-        tableName: "clients",
+        modelName: "Order",
+        tableName: "orders",
         timestamps: true,
         underscored: true,
     }
