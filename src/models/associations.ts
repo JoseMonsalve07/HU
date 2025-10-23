@@ -17,6 +17,18 @@ Client.belongsTo(User, {
 });
 
 /* ==========================
+   USER <-> ORDER
+========================== */
+User.hasMany(Order, {
+    foreignKey: "user_id",
+    as: "orders",
+});
+Order.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "user",
+});
+
+/* ==========================
    CLIENT <-> ORDER
 ========================== */
 Client.hasMany(Order, {
