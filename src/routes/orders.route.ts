@@ -1,4 +1,4 @@
-import { registerOrderController } from "../controllers/orders.controller.ts";
+import { registerOrderController, getOrders } from "../controllers/orders.controller.ts";
 import { Router } from "express";
 
 const ordersRouter = Router();
@@ -13,5 +13,7 @@ ordersRouter.post("/register", async (req, res) => {
     }
 }
 );
+
+ordersRouter.get('/', getOrders);
 
 export default ordersRouter;

@@ -32,11 +32,8 @@ Client.init({
         },
     },
     phone: {
-        type: DataTypes.STRING(10),
-        allowNull: false,
-        validate: {
-            is: /^[0-9]{10}$/,
-        },
+        type: DataTypes.STRING(20),
+        allowNull: true,
     },
     createdAt: {
         type: DataTypes.DATE,
