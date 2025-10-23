@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { registerController, loginController, refreshTokenController, getAllUsersController } from "../controllers/users.controller.ts";
 
-const userRouter: Router = Router();
+const usersRouter: Router = Router();
 
-userRouter.post('/register', registerController);
-userRouter.post('/login', loginController);
-userRouter.post('/refresh', refreshTokenController);
-userRouter.get('/', getAllUsersController);
+usersRouter.post('/register', registerController);
+usersRouter.post('/login', loginController);
+usersRouter.post('/refresh', refreshTokenController);
+usersRouter.get('/', getAllUsersController);
 
-export default userRouter;
+export default usersRouter;
