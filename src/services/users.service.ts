@@ -24,5 +24,34 @@ export const loginUser = async (email: string, password: string) => {
         { expiresIn: "1d" }
     );
 
-    return { token, role: user.role, name: user.name }
+    const refreshToken = jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_REFRESH_SECRET as string,
+        { expiresIn: "7d" }
+    );
+
+
+    return { token, refreshToken, role: user.role, name: user.name };
+};
+
+export const refreshAuthToken = async (token: string) => {
+    if (!token) throw new Error("Token no proporcionado");
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload;
+        const newToken = jwt.sign(
+            { id: decoded.id, role: decoded.role },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "1d" }
+        );
+
+            return { token: newToken };
+    } catch (err) {
+        throw new Error("Token inválido o expirado");
+    }
+};
+
+export const getAllUsers = async () => {
+    const users = await User.findAll({ attributes: { exclude: ['password', 'refreshToken'] } });
+    return users;
 }
